@@ -15,7 +15,6 @@ export class UserEffects {
     private store: Store
   ) {}
 
-  // Effect: Load users on app initialization
   public loadUsers$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UserActions.loadUsers),
@@ -28,7 +27,6 @@ export class UserEffects {
     )
   );
 
-  // Effect: Add user
   public addUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UserActions.addUser),
@@ -41,7 +39,6 @@ export class UserEffects {
     )
   );
 
-  // Effect: Update user
   public updateUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UserActions.updateUser),
@@ -54,7 +51,6 @@ export class UserEffects {
     )
   );
 
-  // Effect: Delete user
   public deleteUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UserActions.deleteUser),
@@ -67,14 +63,11 @@ export class UserEffects {
     )
   );
 
-  // Requirement 6: Effect that listens to selectedUserId changes and fetches user details
-  // Uses switchMap to cancel previous requests when user changes
   public loadUserDetailsOnSelect$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UserActions.selectUser),
-      filter(({ userId }) => userId !== null), // Only proceed if userId is not null
+      filter(({ userId }) => userId !== null),
       switchMap(({ userId }) =>
-        // switchMap automatically cancels the previous API call if a new user is selected
         this.userService.getUserDetails(userId!).pipe(
           map(userDetails => {
             if (userDetails) {
