@@ -1,0 +1,31 @@
+.user-name-container {
+  margin-bottom: 1.5rem;
+
+  h3 {
+    color: #333;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+  }
+}
+
+.user-name {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.2rem;
+
+  .label {
+    font-weight: bold;
+    color: #555;
+  }
+
+  .value {
+    color: #3f51b5;
+    font-weight: 600;
+  }
+}
+
+.no-selection {
+  color: #999;
+  font-style: italic;
+}

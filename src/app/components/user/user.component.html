@@ -1,0 +1,10 @@
+<div class="user-name-container">
+  <h3>Selected User</h3>
+  <div class="user-name" *ngIf="selectedUser$ | async as user; else noSelection">
+    <span class="label">Name:</span>
+    <span class="value">{{ user.name }}</span>
+  </div>
+  <ng-template #noSelection>
+    <p class="no-selection">No user selected</p>
+  </ng-template>
+</div>

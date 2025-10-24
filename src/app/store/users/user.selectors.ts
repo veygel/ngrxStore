@@ -1,5 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { UserState, userAdapter } from './user.state';
+import { selectAllOrders } from '../orders/order.selectors';
 
 export const selectUserState = createFeatureSelector<UserState>('users');
 
@@ -49,14 +50,16 @@ export const selectSelectedUser = createSelector(
   selectUserEntities,
   selectSelectedUserId,
   (entities, selectedId) => {
-    return null;
+    return selectedId !== null ? entities[selectedId] || null : null;
   }
 );
 
 export const selectSelectedUserOrders = createSelector(
   selectSelectedUserId,
-  (selectedUserId) => {
-    return [];
+  selectAllOrders,
+  (selectedUserId, allOrders) => {
+    if (selectedUserId === null) return [];
+    return allOrders.filter(order => order.userId === selectedUserId);
   }
 );
 
@@ -65,8 +68,8 @@ export const selectUserSummary = createSelector(
   selectSelectedUserOrders,
   (user, orders) => {
     return {
-      name: '',
-      totalOrders: 0
+      name: user?.name || '',
+      totalOrders: orders.reduce((sum, order) => sum + order.total, 0)
     };
   }
 );

@@ -1,0 +1,21 @@
+<div class="user-orders-container">
+  <div class="left-column">
+    <h2>Users</h2>
+    <div class="user-list">
+      <button
+        *ngFor="let user of users$ | async"
+        (click)="onSelectUser(user.id)"
+        class="user-button">
+        {{ user.name }}
+      </button>
+    </div>
+  </div>
+
+  <div class="right-column">
+    <h2>Selected User Details</h2>
+    <div class="user-details">
+      <app-user></app-user>
+      <app-orders-total></app-orders-total>
+    </div>
+  </div>
+</div>

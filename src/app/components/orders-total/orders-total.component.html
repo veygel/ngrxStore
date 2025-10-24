@@ -1,0 +1,14 @@
+<div class="orders-total-container">
+  <h3>Order Summary</h3>
+  <div class="summary" *ngIf="userSummary$ | async as summary">
+    <div class="summary-row" *ngIf="summary.name">
+      <span class="label">User:</span>
+      <span class="value">{{ summary.name }}</span>
+    </div>
+    <div class="summary-row" [class.highlight]="summary.totalOrders > 0">
+      <span class="label">Total Orders:</span>
+      <span class="value total">${{ summary.totalOrders.toFixed(2) }}</span>
+    </div>
+    <p class="no-selection" *ngIf="!summary.name">No user selected</p>
+  </div>
+</div>
