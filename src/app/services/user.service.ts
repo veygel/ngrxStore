@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, delay } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { User } from '../models/user.model';
 import { Order } from '../models/order.model';
 import usersData from '../../mock-data/users.json';
@@ -9,8 +10,8 @@ import ordersData from '../../mock-data/orders.json';
   providedIn: 'root'
 })
 export class UserService {
-  private mockUsers: User[] = usersData;
-  private mockOrders: Order[] = ordersData;
+  private mockUsers: User[] = usersData as User[];
+  private mockOrders: Order[] = ordersData as Order[];
 
   constructor() { }
 

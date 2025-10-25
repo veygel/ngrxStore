@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { selectAllUsers, selectUser } from '../../store/users';
+import { selectAllUsers, selectUser, loadUsers } from '../../store/users';
+import { loadOrders } from '../../store/orders';
 import { User } from '../../models/user.model';
 import { UserComponent } from '../user/user.component';
 import { OrdersTotalComponent } from '../orders-total/orders-total.component';
@@ -21,7 +22,10 @@ export class UserOrdersComponent implements OnInit {
     this.users$ = this.store.select(selectAllUsers);
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.store.dispatch(loadUsers());
+    this.store.dispatch(loadOrders());
+  }
 
   public onSelectUser(userId: number): void {
     this.store.dispatch(selectUser({ userId }));

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
@@ -8,14 +8,11 @@ import * as OrderActions from './order.actions';
 
 @Injectable()
 export class OrderEffects {
+  private actions$ = inject(Actions);
+  private userService = inject(UserService);
+  private store = inject(Store);
 
-  constructor(
-    private actions$: Actions,
-    private userService: UserService,
-    private store: Store
-  ) {}
-
-  public loadOrders$ = createEffect(() =>
+  loadOrders$ = createEffect(() =>
     this.actions$.pipe(
       ofType(OrderActions.loadOrders),
       switchMap(() =>
@@ -27,7 +24,7 @@ export class OrderEffects {
     )
   );
 
-  public addOrder$ = createEffect(() =>
+  addOrder$ = createEffect(() =>
     this.actions$.pipe(
       ofType(OrderActions.addOrder),
       switchMap(({ order }) =>
@@ -39,7 +36,7 @@ export class OrderEffects {
     )
   );
 
-  public updateOrder$ = createEffect(() =>
+  updateOrder$ = createEffect(() =>
     this.actions$.pipe(
       ofType(OrderActions.updateOrder),
       switchMap(({ order }) =>
@@ -51,7 +48,7 @@ export class OrderEffects {
     )
   );
 
-  public deleteOrder$ = createEffect(() =>
+  deleteOrder$ = createEffect(() =>
     this.actions$.pipe(
       ofType(OrderActions.deleteOrder),
       switchMap(({ orderId }) =>

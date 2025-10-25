@@ -1,6 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
 import { map, catchError, switchMap, filter } from 'rxjs/operators';
 import { UserService } from '../../services/user.service';
@@ -8,14 +7,10 @@ import * as UserActions from './user.actions';
 
 @Injectable()
 export class UserEffects {
+  private actions$ = inject(Actions);
+  private userService = inject(UserService);
 
-  constructor(
-    private actions$: Actions,
-    private userService: UserService,
-    private store: Store
-  ) {}
-
-  public loadUsers$ = createEffect(() =>
+  loadUsers$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UserActions.loadUsers),
       switchMap(() =>
@@ -27,7 +22,7 @@ export class UserEffects {
     )
   );
 
-  public addUser$ = createEffect(() =>
+  addUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UserActions.addUser),
       switchMap(({ user }) =>
@@ -39,7 +34,7 @@ export class UserEffects {
     )
   );
 
-  public updateUser$ = createEffect(() =>
+  updateUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UserActions.updateUser),
       switchMap(({ user }) =>
@@ -51,7 +46,7 @@ export class UserEffects {
     )
   );
 
-  public deleteUser$ = createEffect(() =>
+  deleteUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UserActions.deleteUser),
       switchMap(({ userId }) =>
@@ -63,7 +58,7 @@ export class UserEffects {
     )
   );
 
-  public loadUserDetailsOnSelect$ = createEffect(() =>
+  loadUserDetailsOnSelect$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UserActions.selectUser),
       filter(({ userId }) => userId !== null),
