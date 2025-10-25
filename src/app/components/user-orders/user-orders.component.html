@@ -1,10 +1,47 @@
 <div class="user-orders-container">
     <div class="left-column">
         <h2>Users</h2>
+
+        <!-- Search Bar -->
+        <div class="search-bar">
+            <input type="text" [(ngModel)]="searchTerm" (input)="onSearch()" placeholder="Search by name or ID..." class="search-input" />
+            <button *ngIf="searchTerm" (click)="clearSearch()" class="btn-clear-search">✕</button>
+        </div>
+
+        <!-- Add User Form -->
+        <div class="add-user-form">
+            <h3>Add New User</h3>
+            <p class="form-hint">Try adding a user with an existing ID to see duplicate prevention in action!</p>
+            <div class="form-group">
+                <input type="number" [(ngModel)]="newUserId" placeholder="User ID" class="form-input" [disabled]="!!(loading$ | async)" min="1" />
+                <input type="text" [(ngModel)]="newUserName" placeholder="User Name" class="form-input" [disabled]="!!(loading$ | async)" />
+                <button (click)="onAddUser()" class="btn-add" [disabled]="!newUserName.trim() || !newUserId || newUserId < 1 || !!(loading$ | async)">
+          <span *ngIf="!(loading$ | async)">Add User</span>
+          <span *ngIf="loading$ | async" class="spinner"></span>
+        </button>
+            </div>
+        </div>
+
+        <!-- User List -->
         <div class="user-list">
-            <button *ngFor="let user of users$ | async" (click)="onSelectUser(user.id)" class="user-button">
-        {{ user.name }}
-      </button>
+            <!-- Loading spinner -->
+            <div *ngIf="loading$ | async" class="loading-container">
+                <div class="spinner-large"></div>
+                <p>Loading users...</p>
+            </div>
+
+            <!-- User items -->
+            <div *ngIf="!(loading$ | async)">
+                <div *ngFor="let user of filteredUsers$ | async" class="user-item">
+                    <button (click)="onSelectUser(user.id)" class="user-button">
+            {{ user.name }}
+          </button>
+                    <button (click)="showDeleteConfirmation(user.id)" class="btn-delete">Delete</button>
+                </div>
+                <div *ngIf="(filteredUsers$ | async)?.length === 0" class="no-results">
+                    No users found
+                </div>
+            </div>
         </div>
     </div>
 
@@ -12,6 +49,30 @@
         <div class="user-details">
             <app-user></app-user>
             <app-orders-total></app-orders-total>
+
+            <!-- Update User Form -->
+            <div class="update-user-form" *ngIf="selectedUser$ | async as selectedUser">
+                <h3>Update Selected User</h3>
+                <div class="form-group">
+                    <input type="text" [(ngModel)]="updateUserName" placeholder="New Name" class="form-input" [disabled]="!!(loading$ | async)" />
+                    <button (click)="onUpdateUser(selectedUser.id)" class="btn-update" [disabled]="!updateUserName.trim() || !!(loading$ | async)">
+            <span *ngIf="!(loading$ | async)">Update User</span>
+            <span *ngIf="loading$ | async" class="spinner"></span>
+          </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal-overlay" *ngIf="userToDelete !== null" (click)="cancelDelete()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <h3>Delete User</h3>
+        <p>Are you sure you want to delete this user?</p>
+        <div class="modal-actions">
+            <button (click)="cancelDelete()" class="btn-cancel">Cancel</button>
+            <button (click)="confirmDelete()" class="btn-confirm-delete">Delete</button>
         </div>
     </div>
 </div>
